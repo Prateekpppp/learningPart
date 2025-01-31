@@ -1,0 +1,390 @@
+Online Site: https://sqliteonline.com/ 
+
+8*3hr = 24hr live sessions with trainer - End to End MS-SQL Development 
+Class-1, Class-2 - Theory 
+Class-3 to Class-8 - Practical
+1.5hr - Break 15min - 1.15min of class = 3 hr 
+QnA - Class - QnA 
+
+Class-1: Theory 
+---------------
+what? Microsoft SQL Server(Database management software) - SQL (Structured query language)
+why?  SQL - It is the very core/ fundamental language in software industry 
+how?  weekend batch - 3hr - 24hr live class (1st half - 15min break - 2nd half)
+
+RDBMS(Structured) - MS-SQL Server(70%), Oracle, DB2, mysql, Postgres 
+NoSQL(Bigdata/Unstructured) - MongoDB, Redis, Cassandra, CouchDB, DocumentDB, AuroraDB
+
+Application Layer: 
+User Interface - HTML, CSS
+Application layer - c#, java
+Database layer - SQL 
+
+Client Server Architecture - Google, Facebook, Instagram, Amazon, YouTube 
+OLTP - Online Transaction Protocol 
+
+
+MS-SQL Server/ Database Server - Server Software 
+SSMS/ SQL Server Management Studio - Clint software 
+SSMS <--> SQL Server
+
+-- What is client server architecture? 
+-- What is data consistency? 
+
+-- Command types:
+DQL, DDL, DML, DCL
+
+
+
+I want to store student information
+StudentDetails
+--------------
+S_ID, Name, Age, Contact, Address
+1     Raj   10   98301    Pune 
+
+I want to store employee information 
+EmployeeDetails(EID, EName, EAge, EAddress)
+
+
+person(ID, Name, Age)
+1, Priya, 25
+2, Trimala, 26
+3, Mahesh, 26
+
+
+1 --> 25
+2 --> 26
+3 --> 26
+
+2 --> 26/27
+
+RDBMS -- MS-SQL Server
+Databases
+Tables
+Data
+
+-- Online food delivery app
+CustomerDetails(cid, cname, cage, cmobile)
+OrderDetails(oid, oname, oprice, cid)
+
+-- What is normalization? 
+Technique to minimize data duplication and increase logical consistency. 
+StudentDetails(Roll, S_Name, S_Age, S_Contact, S_Address, S_Gender, Percentage, Course, Class, Section)
+
+-- Why to perform normalization? 
+Remove redundancy from database tables
+Maintain consistency and integrity
+
+-- What is consistency? 
+there should not be any data mismatch between different access. 
+
+-- what is integrity? 
+If the data is consistent that means the table maintained its integrity.  
+
+anomalies without normalization?
+Redundancy, Insert, update, delete anomalies
+
+Person(SSN, Name, Age, Address)
+SSN --> Name
+
+
+Customer(CID, CName, CAge, CMobile) 
+
+CID --> CName, CAge, CMobile
+
+
+
+client software - SSMS
+server software - SQL Server 
+
+
+
+
+
+
+
+
+Class-2: Theory M1.2 P13
+---------------------------------
+
+-- what is dependency? 
+It is the logical relation between two columns in a table. 
+
+
+-- Funtional dependency:
+A cell value in a row can uniquely determine the other cell values of the same row
+
+employee_name --> Experience 
+Chintan       --> 
+Employee_ID --> Experience 
+ID --> Name, Age, Address, Gender
+
+-- Functional dependency 
+A --> B If for the value of A there is a unique value of B
+a1 --> b1
+a1 --> b2
+Here for the value of A as a1 we are not getting unique value of B 
+as there two values of B as b1 and b2
+
+IndianDetails(AadhaarNmber, Name, Age, Address, contact)
+AadhaarNmber --> Name, Age, Address, contact 
+
+Student(Roll, Name, Age, Class) 
+Age --> Class 
+Roll --> Class 
+ 
+
+Person(PID, PName, PAge)
+1, Raj, 10
+2, Riya, 20
+3, Nita, 10
+4, Rohit, 15
+
+1 --> 10
+3 --> 10
+
+
+1 --> 15
+1 --> 20
+
+A   --> C
+PID --> Age
+1/a2   --> 10/c2
+3/a3   --> 10/c2
+
+1 --> 10
+1 --> 20
+
+4 --> 15
+4 --> 20
+
+
+-- Full Functional dependency 
+Student(roll_num, Name, course_id, Subject, Grade)
+xyz --> W
+
+roll_num, course_id --> grade 
+(1, CSE301) --> A
+(1, CSE306) --> C
+(2, CSE301) --> B
+(2, CSE306) --> A
+(3, CSE316) --> C
+
+
+
+
+Roll_num, Subject --> Grade
+(1, DBMS) --> A
+(1, DS)   --> C
+(2, DBMS) --> B
+(2, DS)   --> A
+(3, AI)   --> C
+
+
+
+
+
+-- Partial Functional dependency 
+Employee(emp_id, emp_name, emp_Age, emp_contact, Manager)
+
+emp_id --> emp_name, emp_Age, emp_contact, Manager -- functional dependency 
+emp_id, emp_name --> emp_Age, emp_contact, Manager -- partial functional dependency 
+emp_id, emp_name, emp_Age --> emp_contact, Manager -- partial functional dependency 
+
+
+
+
+emp_id, emp_name --> Manager
+emp_id --> emp_name, Manager
+
+Table(A,B,C,D,E)
+A --> B,C,D,E
+A,B --> C,D,E
+A,B,C --> D,E
+
+
+-- Super Key: A super key is a single/combination of columns that uniquely identifies any row within a table.
+-- Candidate Key: A Candidate key is a subset of Super key without any unnecessary attributes for uniquely identifying rows.
+-- Prime attribute: An attribute that is a part of one of the candidate keys is known as prime attribute.
+-- Non Prime attribute: An attribute that is not part of the candidate keys is known as non prime attribute.
+
+Note: All the candidate keys are super key but all the super keys are not candidate keys. 
+
+Super key = Primary key
+candidate key 
+
+emp_id --> emp_name, emp_Age, emp_contact, Manager 
+Prime attribute/column --> Non-Prime attribute/column 
+
+-- Transitive Functional Dependency 
+PersonDetails(ID, Name, Age, PIN, Street, City)
+
+ID --> PIN
+PIN --> Street, City
+
+ID --> Street, City (transitive in nature)
+
+
+
+
+EmployeeDetails(EID, E_Name, Department, Base_Location)
+
+EID --> Department
+Department --> Base_Location
+EID --> Base_Location (transitive in nature)
+
+
+
+
+
+
+
+
+-- Multivalued Functional Depedency: (Special case)
+When there are more than one independent multivalued attribute in a table. 
+
+
+
+
+Example:
+PersonDetails(ID, Name, Age, country, nationality)
+1, raj, India, Indian
+2, Bob, US, American 
+3, Puja, India, Indian
+4, Liza, US, American 
+
+
+country --> nationality
+India --> Indian
+US --> American 
+
+
+Model --> --> Year
+
+
+
+col1, col2, col3, col4, ....
+
+Student(S_ID, S_Name, S_Age, S_Contact)
+CarDetails(Car_Name, Car_Model, Brand_Name)
+
+
+
+
+
+-- Decomposition
+
+-- Loss less join decomposition 
+Table(a, b, c, d, e, f, g, h)
+Table1(a, b, c, d)
+Table2(e, f, g, h)
+
+Table = Table1 U Table2
+
+
+Student(SID, SName, SAge, SAddress, SContact, Gender)
+Student1(SID, SName, SAge)
+Student2(SID, SAddress, SContact, Gender)
+
+Student = Student1 U Student2 
+          SID, SName, SAge, SID, SAddress, SContact
+
+-- not a lossless join decomposition 
+Table(a, b, c, d, e, f, g, h)
+Table1(a, b, c, d)
+Table2(a, f, g, h)
+
+StudentCourse(Roll, Name, CourseID, CourseName, Grade, Age, Address)
+StudentDetails(Roll, Name, Age, Address)
+CourseDetails(CourseID, CourseName)
+StudentGrade(Roll, CourseID, Grade)
+
+
+-- Dependency preserving decomposition 
+-- A decomposition will be termed as dependency preserving decomposition
+-- if the child tables are maintaining the functional dependencies and
+-- after joining we can get all the FD back of the original table. 
+
+Table(a, b, c, d, e, f)
+a --> b, c    -- a, b, c
+d --> e, f    -- d, e, f
+
+Table1(a, b, c) a --> b, c
+Table2(d, e, f) d --> e, f
+
+Table1 U Table2
+a --> b, c
+d --> e, f
+
+-- Dependency is finding the column relations within a single table. 
+-- If the related columns of any functional dependency present in a single table then only we can retain the dependency. 
+
+PersonDetails(ID, Name, Age, PIN, Street, City)
+ID --> Name, Age
+PIN --> Street, City
+
+PersonDetails1 (ID, Name, Age, PIN)     ID --> Name, Age
+PersonDetails2 (PIN, Street, City)      PIN --> Street, City
+
+PersonDetails = PersonDetails1 U PersonDetails2
+
+
+PersonDetails(ID, Name, Age, AreaCode, Street, City)
+              ID, Name, Age, AreaCode, Street, City
+ID --> Name, Age
+
+PersonDetails1 (ID, Name, Age)
+PersonDetails2 (AreaCode, Street, Age)
+PersonDetails3 (ID, City)
+
+Dependency Preserving Decomposition --> PersonDetails1
+Loss less join decomposition --> met
+
+
+
+
+lossless join decomposition --> All the columns should be preserved in the sub tables
+Dependency preserving decomposition --> All the funtional dependencies should be preserved 
+
+-- decompose student table into two sub tables using lossless join decomposition technique 
+Student(SID, S_Name, S_Age, S_Address, S_Contact, S_Gender)
+
+Student1(SID, S_Name, S_Age)
+Student2(SID, S_Address, S_Contact, S_Gender)
+
+
+-- decompose student table into two sub tables using dependency preserving technique 
+Student(SID, S_Name, S_Age,  S_Gender, S_AreaCode, S_Address, S_City)
+
+SID --> S_Name, S_Age,  S_Gender
+S_AreaCode --> S_Address, S_City
+
+Student1(SID, S_Name, S_Age,  S_Gender, S_City)
+Student2(SID, S_AreaCode, S_Address, S_City)
+
+
+Student1(SID, S_Name, S_Age)
+1, Anushka, 25
+3, Prince, 26
+2, Roland, 28
+
+
+
+
+
+---------------------------Normalization---------------------------------
+-- What is normalization? 
+Technique to minimize data duplication and increase logical consistency. 
+
+-- Why to perform normalization? 
+Remove redundancy from database
+Maintain consistency and integrity 
+
+
+-- First Normal Form:
+Rule-1: Single valued columns
+Rule-2: same kind of data in each column
+Rule-3: All column name should be unique
+Rule-4: FYI - Row/ Column order does not matter
+
+

@@ -1,0 +1,14 @@
+-- what are constraint names 
+-- add foreign key 
+-- add foreign key in existing column
+
+-- schemes, dbo
+
+-- assignment 1: 4(How), 6(any other way)
+
+-- groupby
+
+
+
+
+--- How to submit the assignment

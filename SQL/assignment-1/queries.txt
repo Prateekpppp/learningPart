@@ -1,0 +1,17 @@
+
+
+2: alter table Salesman
+alter city set default 'kanpur';
+
+2: alter table customer 
+modify column customername varchar(255) not null;
+
+3: SELECT * FROM `customer` where customername LIKE '%N' and purchaseAmount<500;
+
+4:  
+
+5: select s.salesmanname, c.customername, s.commission, s.city, o.orderdate from Salesman as s inner join customer as c on s.salesmanid=c.salesmanid inner join orders as o on o.salesmanid=s.salesmanid where 500<c.purchaseamount<1500;
+
+6: select * from Salesman as s right join orders as o on s.salesmanid = o.salesmanid;
+
+
