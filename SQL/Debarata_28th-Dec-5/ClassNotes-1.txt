@@ -1,0 +1,99 @@
+Online Site: https://sqliteonline.com/ 
+
+8*3hr = 24hr live sessions with trainer - End to End MS-SQL Development 
+Class-1, Class-2 - Theory 
+Class-3 to Class-8 - Practical
+1.5hr - Break 15min - 1.15min of class = 3 hr 
+QnA - Class - QnA 
+
+Class-1: Theory 
+---------------
+what? Microsoft SQL Server(Database management software) - SQL (Structured query language)
+why?  SQL - It is the very core/ fundamental language in software industry 
+how?  weekend batch - 3hr - 24hr live class (1st half - 15min break - 2nd half)
+
+RDBMS(Structured) - MS-SQL Server(70%), Oracle, DB2, mysql, Postgres 
+NoSQL(Bigdata/Unstructured) - MongoDB, Redis, Cassandra, CouchDB, DocumentDB, AuroraDB
+
+Application Layer: 
+User Interface - HTML, CSS
+Application layer - c#, java
+Database layer - SQL 
+
+Client Server Architecture - Google, Facebook, Instagram, Amazon, YouTube 
+OLTP - Online Transaction Protocol 
+
+
+MS-SQL Server/ Database Server - Server Software 
+SSMS/ SQL Server Management Studio - Clint software 
+SSMS <--> SQL Server
+
+-- What is client server architecture? 
+-- What is data consistency? 
+
+-- Command types:
+DQL, DDL, DML, DCL
+
+
+
+I want to store student information
+StudentDetails
+--------------
+S_ID, Name, Age, Contact, Address
+1     Raj   10   98301    Pune 
+
+I want to store employee information 
+EmployeeDetails(EID, EName, EAge, EAddress)
+
+
+person(ID, Name, Age)
+1, Priya, 25
+2, Trimala, 26
+3, Mahesh, 26
+
+
+1 --> 25
+2 --> 26
+3 --> 26
+
+2 --> 26/27
+
+RDBMS -- MS-SQL Server
+Databases
+Tables
+Data
+
+-- Online food delivery app
+CustomerDetails(cid, cname, cage, cmobile)
+OrderDetails(oid, oname, oprice, cid)
+
+-- What is normalization? 
+Technique to minimize data duplication and increase logical consistency. 
+StudentDetails(Roll, S_Name, S_Age, S_Contact, S_Address, S_Gender, Percentage, Course, Class, Section)
+
+-- Why to perform normalization? 
+Remove redundancy from database tables
+Maintain consistency and integrity
+
+-- What is consistency? 
+there should not be any data mismatch between different access. 
+
+-- what is integrity? 
+If the data is consistent that means the table maintained its integrity.  
+
+anomalies without normalization?
+Redundancy, Insert, update, delete anomalies
+
+Person(SSN, Name, Age, Address)
+SSN --> Name
+
+
+Customer(CID, CName, CAge, CMobile) 
+
+CID --> CName, CAge, CMobile
+
+
+
+client software - SSMS
+server software - SQL Server 
+

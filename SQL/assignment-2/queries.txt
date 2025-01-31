@@ -1,0 +1,81 @@
+1: Create a user-defined functions to stuff the Chicken into ‘Quick Bites’. Eg: ‘Quick Chicken Bites’.
+--------------------------------------------
+
+SELECT CONCAT('Quick', ' Chicken', ' Bites'); 
+
+ -- way-1:
+ ---------
+create function stuffChicken()
+returns varchar(250)
+
+AS
+BEGIN
+
+declare @txt varchar
+return(select CONCAT('Quick', ' Chicken', ' Bites'))
+
+END
+
+select dbo.stuffChicken()
+
+
+-- way-2:
+---------
+create function stuffChicken()
+returns varchar(250)
+
+AS
+BEGIN
+
+declare @txt varchar
+return STUFF('Quick Bites', 1, 5, 'Quick Chicken');
+
+END
+
+select dbo.stuffChicken()
+
+
+2: Use the function to display the restaurant name and cuisine type which has the maximum number of rating. 
+-----------------------------------------------------
+
+create function maxNoOfRating()
+returns table
+
+AS
+BEGIN
+
+return (select j.RestaurantName, j.CuisinesType from jomato as j where No_of_Rating=(select max(No_of_Rating) from jomato))
+
+END
+
+select dbo.maxNoOfRating()
+
+select j.RestaurantName, j.CuisinesType from jomato as j where No_of_Rating=(select max(No_of_Rating) from jomato);
+
+
+3: Create a Rating Status column to display the rating as ‘Excellent’ if it has more the 4 start rating, ‘Good’ if it has above 3.5 and below 4 star rating, ‘Average’ if it is above 3 and below 3.5 and ‘Bad’ if it is below 3 star rating
+----------------------------------------------------
+
+select *,
+case
+when rating>=4 then 'Excellent'
+when rating<4 and rating>=3.5 then 'Good'
+when rating<3.5 and rating>=3 then 'Average'
+when 3>rating then 'Bad'
+end
+as Rating_Status
+from jomato;
+
+
+4: Find the Ceil, floor and absolute values of the rating column and display the current
+date and separately display the year, month_name and day.
+-------------------------------------------------------
+
+select ceil(rating),floor(rating),abs(rating), CURRENT_DATE() as today, year(CURRENT_DATE()) as year, month(CURRENT_DATE()) as month, day(CURRENT_DATE()) as day from jomato as j;
+
+
+
+5: Display the restaurant type and total average cost using rollup.
+-------------------------------------------------------
+
+select COALESCE(RestaurantType,total) as RestaurantType, sum(AverageCost) as AverageCost from jomato GROUP by ROLLUP(RestaurantType);

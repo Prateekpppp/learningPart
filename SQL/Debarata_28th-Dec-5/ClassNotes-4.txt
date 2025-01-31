@@ -1,0 +1,776 @@
+Online Site: https://sqliteonline.com/ 
+
+8*3hr = 24hr live sessions with trainer - End to End MS-SQL Development 
+Class-1, Class-2 - Theory 
+Class-3 to Class-8 - Practical
+1.5hr - Break 15min - 1.15min of class = 3 hr 
+QnA - Class - QnA 
+
+Class-1: Theory 
+---------------
+what? Microsoft SQL Server(Database management software) - SQL (Structured query language)
+why?  SQL - It is the very core/ fundamental language in software industry 
+how?  weekend batch - 3hr - 24hr live class (1st half - 15min break - 2nd half)
+
+RDBMS(Structured) - MS-SQL Server(70%), Oracle, DB2, mysql, Postgres 
+NoSQL(Bigdata/Unstructured) - MongoDB, Redis, Cassandra, CouchDB, DocumentDB, AuroraDB
+
+Application Layer: 
+User Interface - HTML, CSS
+Application layer - c#, java
+Database layer - SQL 
+
+Client Server Architecture - Google, Facebook, Instagram, Amazon, YouTube 
+OLTP - Online Transaction Protocol 
+
+
+MS-SQL Server/ Database Server - Server Software 
+SSMS/ SQL Server Management Studio - Clint software 
+SSMS <--> SQL Server
+
+-- What is client server architecture? 
+-- What is data consistency? 
+
+-- Command types:
+DQL, DDL, DML, DCL
+
+
+
+I want to store student information
+StudentDetails
+--------------
+S_ID, Name, Age, Contact, Address
+1     Raj   10   98301    Pune 
+
+I want to store employee information 
+EmployeeDetails(EID, EName, EAge, EAddress)
+
+
+person(ID, Name, Age)
+1, Priya, 25
+2, Trimala, 26
+3, Mahesh, 26
+
+
+1 --> 25
+2 --> 26
+3 --> 26
+
+2 --> 26/27
+
+RDBMS -- MS-SQL Server
+Databases
+Tables
+Data
+
+-- Online food delivery app
+CustomerDetails(cid, cname, cage, cmobile)
+OrderDetails(oid, oname, oprice, cid)
+
+-- What is normalization? 
+Technique to minimize data duplication and increase logical consistency. 
+StudentDetails(Roll, S_Name, S_Age, S_Contact, S_Address, S_Gender, Percentage, Course, Class, Section)
+
+-- Why to perform normalization? 
+Remove redundancy from database tables
+Maintain consistency and integrity
+
+-- What is consistency? 
+there should not be any data mismatch between different access. 
+
+-- what is integrity? 
+If the data is consistent that means the table maintained its integrity.  
+
+anomalies without normalization?
+Redundancy, Insert, update, delete anomalies
+
+Person(SSN, Name, Age, Address)
+SSN --> Name
+
+
+Customer(CID, CName, CAge, CMobile) 
+
+CID --> CName, CAge, CMobile
+
+
+
+client software - SSMS
+server software - SQL Server 
+
+
+
+
+
+
+
+
+Class-2: Theory M1.2 P13
+---------------------------------
+
+-- what is dependency? 
+It is the logical relation between two columns in a table. 
+(drivinglicenceNumber,name,addres,age,cotact)
+
+-- Funtional dependency:
+A cell value in a row can uniquely determine the other cell values of the same row
+
+employee_name --> Experience 
+Chintan       --> 
+Employee_ID --> Experience 
+ID --> Name, Age, Address, Gender
+
+-- Functional dependency 
+A --> B If for the value of A there is a unique value of B
+a1 --> b1
+a1 --> b2
+Here for the value of A as a1 we are not getting unique value of B 
+as there two values of B as b1 and b2
+
+IndianDetails(AadhaarNmber, Name, Age, Address, contact)
+AadhaarNmber --> Name, Age, Address, contact 
+
+Student(Roll, Name, Age, Class) 
+Age --> Class 
+Roll --> Class 
+ 
+
+Person(PID, PName, PAge)
+1, Raj, 10
+2, Riya, 20
+3, Nita, 10
+4, Rohit, 15
+
+1 --> 10
+3 --> 10
+
+
+1 --> 15
+1 --> 20
+
+A   --> C
+PID --> Age
+1/a2   --> 10/c2
+3/a3   --> 10/c2
+
+1 --> 10
+1 --> 20
+
+4 --> 15
+4 --> 20
+
+
+-- Full Functional dependency 
+Student(roll_num, Name, course_id, Subject, Grade)
+xyz --> W
+
+roll_num, course_id --> grade 
+(1, CSE301) --> A
+(1, CSE306) --> C
+(2, CSE301) --> B
+(2, CSE306) --> A
+(3, CSE316) --> C
+
+
+
+
+Roll_num, Subject --> Grade
+(1, DBMS) --> A
+(1, DS)   --> C
+(2, DBMS) --> B
+(2, DS)   --> A
+(3, AI)   --> C
+
+
+
+
+
+-- Partial Functional dependency 
+Employee(emp_id, emp_name, emp_Age, emp_contact, Manager)
+
+emp_id --> emp_name, emp_Age, emp_contact, Manager -- functional dependency 
+emp_id, emp_name --> emp_Age, emp_contact, Manager -- partial functional dependency 
+emp_id, emp_name, emp_Age --> emp_contact, Manager -- partial functional dependency 
+
+(1, Rabi, 10)
+(2, Rabi, 10)
+
+emp_id, emp_name --> Manager
+emp_id --> emp_name, Manager
+
+Table(A,B,C,D,E)
+A --> B,C,D,E
+A,B --> C,D,E
+A,B,C --> D,E
+
+
+-- Super Key: A super key is a single/combination of columns that uniquely identifies any row within a table.
+-- Candidate Key: A Candidate key is a subset of Super key without any unnecessary attributes for uniquely identifying rows.
+-- Prime attribute: An attribute that is a part of one of the candidate keys is known as prime attribute.
+-- Non Prime attribute: An attribute that is not part of the candidate keys is known as non prime attribute.
+
+Note: All the candidate keys are super key but all the super keys are not candidate keys. 
+
+Super key = Primary key
+candidate key 
+
+emp_id --> emp_name, emp_Age, emp_contact, Manager 
+Prime attribute/column --> Non-Prime attribute/column 
+
+-- Transitive Functional Dependency 
+PersonDetails(ID, Name, Age, PIN, Street, City)
+
+ID --> PIN
+PIN --> Street, City
+
+ID --> Street, City (transitive in nature)
+
+
+
+
+EmployeeDetails(EID, E_Name, Department, Base_Location)
+
+EID --> Department
+Department --> Base_Location
+EID --> Base_Location (transitive in nature)
+
+
+
+
+-- Multivalued Functional Depedency: (Special case)
+When there are more than one independent multivalued attribute in a table. 
+
+
+
+
+Example:
+PersonDetails(ID, Name, Age, country, nationality)
+1, raj, India, Indian
+2, Bob, US, American 
+3, Puja, India, Indian
+4, Liza, US, American 
+
+
+country --> nationality
+India --> Indian
+US --> American 
+
+
+Model --> --> Year
+
+
+
+col1, col2, col3, col4, ....
+
+Student(S_ID, S_Name, S_Age, S_Contact)
+CarDetails(Car_Name, Car_Model, Brand_Name)
+
+
+
+
+
+-- Decomposition
+
+-- Loss less join decomposition 
+Table(a, b, c, d, e, f, g, h)
+Table1(a, b, c, d)
+Table2(e, f, g, h)
+
+Table = Table1 U Table2
+
+
+Student(SID, SName, SAge, SAddress, SContact, Gender)
+Student1(SID, SName, SAge)
+Student2(SID, SAddress, SContact,Gender)
+
+Student = Student1 U Student2 
+          SID, SName, SAge, SID, SAddress, SContact, Gender
+
+-- not a lossless join decomposition 
+Table(a, b, c, d, e, f, g, h)
+Table1(a, b, c, d)
+Table2(e, f, g, h)
+
+StudentCourse(Roll, Name, CourseID, CourseName, Grade, Age, Address)
+StudentDetails(Roll, Name, Age, Address)
+CourseDetails(CourseID, CourseName)
+StudentGrade(Roll, CourseID, Grade)
+
+
+-- Dependency preserving decomposition 
+-- A decomposition will be termed as dependency preserving decomposition
+-- if the child tables are maintaining the functional dependencies and
+-- after joining we can get all the FD back of the original table. 
+
+Table(a, b, c, d, e, f)
+a --> b, c    -- a, b, c
+d --> e, f    -- d, e, f
+
+Table1(a, b, c) a --> b, c
+Table2(d, e, f) d --> e, f
+
+Table1 U Table2
+a --> b, c
+d --> e, f
+
+-- Dependency is finding the column relations within a single table. 
+-- If the related columns of any functional dependency present in a single table then only we can retain the dependency. 
+
+PersonDetails(ID, Name, Age, PIN, Street, City)
+ID --> Name, Age
+PIN --> Street, City
+
+PersonDetails1 (ID, Name, Age)     ID --> Name, Age
+PersonDetails2 (PIN, Street, City)      PIN --> Street, City
+
+PersonDetails = PersonDetails1 U PersonDetails2
+
+
+PersonDetails(ID, Name, Age, AreaCode, Street, City)
+              ID, Name, Age, AreaCode, Street, City
+ID --> Name, Age
+
+PersonDetails1 (ID, Name, Age)
+PersonDetails2 (AreaCode, Street, Age)
+PersonDetails3 (ID, City)
+
+Dependency Preserving Decomposition --> PersonDetails1
+Loss less join decomposition --> met
+
+
+
+
+lossless join decomposition --> All the columns should be preserved in the sub tables
+Dependency preserving decomposition --> All the funtional dependencies should be preserved 
+
+-- decompose student table into two sub tables using lossless join decomposition technique 
+Student(SID, S_Name, S_Age, S_Address, S_Contact, S_Gender)
+
+Student1(SID, S_Name, S_Age)
+Student2(SID, S_Address, S_Contact, S_Gender)
+
+
+-- decompose student table into two sub tables using dependency preserving technique 
+Student(SID, S_Name, S_Age,  S_Gender, S_AreaCode, S_Address, S_City)
+
+SID --> S_Name, S_Age,  S_Gender
+S_AreaCode --> S_Address, S_City
+
+Student1(SID, S_Name, S_Age,  S_Gender, S_City)
+Student2(SID, S_AreaCode, S_Address, S_City)
+
+
+Student1(SID, S_Name, S_Age)
+1, Anushka, 25
+3, Prince, 26
+2, Roland, 28
+
+
+
+
+
+---------------------------Normalization---------------------------------
+-- What is normalization? 
+Technique to minimize data duplication and increase logical consistency. 
+
+-- Why to perform normalization? 
+Remove redundancy from database
+Maintain consistency and integrity 
+
+
+-- First Normal Form:
+Rule-1: Single valued columns
+Rule-2: same kind of data in each column
+Rule-3: All column name should be unique
+Rule-4: FYI - Row/ Column order does not matter
+
+
+
+
+
+
+
+
+Class-3: Theory M1.2 P109
+--------------------------
+
+
+
+-- Second Normal Form:
+Rule-1: Table should follow first normal form
+Rule-2: No partial dependency in a table
+
+
+-- Third Normal Form:
+Rule-1: Table should follow second normal form
+Rule-2: No transitive dependency in the table
+
+roll --> pin
+pin --> state, city, district 
+
+roll --> state, city, district (remove)
+
+
+RDBMS --> Relational Database Management System 
+online food delivery app:
+customer(cid, cname, ccontact)
+order(oid, oname, oprice,cid)
+
+
+-- BCNF: Boyce - Codd Normal Form (Extension of third Normal Form)
+Rule-1: Table should follow third normal form
+Rule-2: A single Key column should be determining all other columns of the table
+Explanation: Only the related columns must be together. 
+
+
+-- Forth Normal Form:
+Rule-1: Table should follow BCNF
+Rule-2: Table should not have multi valued dependency. 
+
+
+eid, cert, hobby
+
+1, java, music
+1, java, Dance
+1, java, Writing, 
+1, java, Books
+
+eid --> cert (multivalued dependency)
+
+Table1(eid, cert)
+1, java
+
+Table2(eid, hobby)
+1, music
+1, Dance
+1, Writing
+1, books
+
+
+-- I want to store student and course details 
+Student(SID, Name, Age, Contact, CID, CName, CFees, CDuation)
+
+StudentDetais(SID, Name, Age, Contact)
+CourseDetails(CID, CName, CFees, CDuation)
+CourseEnrollment(SID, CID) 
+
+
+
+
+
+--ER Model 
+-- problem statement
+-- requirement gathering 
+-- analyze the requirement
+-- design the tables (ER Diagram)
+-- implementation 
+
+
+
+-- online food delivery app
+customerdetais(cid, cname, cage, ccontact, caddress) 
+1, Radhika, 10, 123, Pune
+2, Vinay, 12, 987, Kolkata
+3, Anudeep, 14, 654, Mumbai
+4, Nitya, 16, 333, Goa
+
+orderdetails(oid, oname, oprice, oquantity, cid)
+100, Momo, 120, 1, 2
+101, Roll, 100, 1, 6
+
+DBMS - Database management system 
+RDBMS - Relationship database management system 
+person(1-100)  --  Relation  --  voter(18-100)
+
+employee -  R  - department
+
+
+College(CID, CName)
+1, abc
+2, xyz
+3, Intellipaat
+
+Student(SID, SName, SAge, CID)
+1, Rahul, 10, 3
+
+
+
+
+
+
+
+
+
+
+
+Class-4: Practical M2 P1
+-----------------------------
+
+-- this is a comment line 
+/*
+This 
+is
+multiple
+comment 
+line
+syntax
+*/
+
+-- SQL programming language is case insencitive 
+create database TestDatabase -- command to create a new database
+Use Adventure Works                    -- command to change the database connection 
+DROP DATABASE TestDatabase   -- command to drop a database
+
+
+
+
+system databases -- below 4 databases are dedicated for SQL use
+-- no user can store information in the system databases. 
+master -- it holds all instance specific information
+model  -- it is the template of a new blank database
+msdb   -- it holds all SQL job related information
+tempdb -- holds temporary data of user databases
+
+-- Instance -- server
+-- database -- user databases
+-- schema   -- a logical space to create table 
+-- tables   -- the container to hold data
+-- data     -- actual data
+
+
+
+
+
+Value: Raveena - 7
+
+char(16)    - simply allocate maximum length in the disk/storage - 16 (Better in performance)
+varchar(16) - after validating the data length it will allocate space - 7 (More space efficient) 
+
+
+create table StudentDetails
+(
+ID int not null, 
+Name varchar(24) not null, 
+Age tinyint, 
+Gender varchar(8), 
+Country varchar(24) not null
+)
+
+drop table StudentDetails
+
+what is NULL? 
+-- NULL is a special character representing "No value" 
+null -- is the column type
+-- what is null and what is null constraint of a table
+what is Primary key?
+-- It is the candidate key which is implemented as primary key. 
+-- A column will be not null and unique if it is a primary key. 
+
+
+-- please store the information of employee
+create table dbo.EmployeeDetails
+(
+E_ID int not null, 
+Name varchar(64) not null, 
+Age tinyint null, 
+Gender varchar(1) not null, 
+City varchar(24) not null, 
+Salary int not null, 
+Contact varchar(12)
+)
+
+
+
+-- Zomato
+Customer(C_ID, C_Name, C_Address, C_Phone)
+1, abc, xyz, 123
+2, def, ynx, 456
+3, ghi, pko, 789
+
+Orders(O_ID, O_Item, O_Status, O_Amount, C_ID)
+1, rice, preparing, 50, 4
+
+
+
+Create Table Person
+(
+PID INT NOT NULL, 
+Name varchar(32) NOT NULL, 
+Address varchar(64) NOT NULL, 
+DOB Date NULL, 
+Primary Key(PID)
+)
+
+insert into person (pid, name, address, dob)
+values(1,'Mahesh', 'Pune', '2000-01-15')
+insert into person 
+values(2,'Asma', 'Mumbai', '2002-02-10')
+insert into person 
+values
+(3,'Nadaf', 'Kolkata', '2005-02-10'),
+(4,'Amit', 'Goa', NULL),
+(5,'Ekwulu', 'Ranchi', '2002-02-10'),
+(6,'Asma', 'Pune', NULL)
+insert into person (pid, name, address)
+values(7,'Asma', 'Pune')
+
+
+-- NULL: NULL is a special character that denotes not having any value 
+-- Unique Constraint: Distinct values + NULL is allowed 
+-- Primary Key Constraint: Not Null + Unique (Candidate Key)
+
+
+
+select -- stating that we want to see the data
+pid, name -- I want to see all the columns of the table
+from   -- is stating from where I want to see the data
+person -- is the table name or data source 
+
+select * from person 
+
+select pid, name, address from person 
+
+
+-- Live Assignment: 
+-- table structure - EmployeeDetails(E_ID, E_Name, E_Address, E_Age)
+
+-- please write the SQL query to create the table 
+-- Write a single SQL query to insert 5 records at a single run
+
+create table EmployeeDetails
+(
+E_Id int,
+E_Name varchar(32),
+E_Address varchar(64),
+E_age int
+)
+
+INSERT INTO EmployeeDetails(E_ID,E_Name, E_Address, E_Age) 
+VALUES
+  (1, 'Dave', 'Pune', 20),
+  (2, 'Disha', 'Mumbai', 31),
+  (3, 'Tom', 'Delhi', 45),
+  (4, 'Liza', 'Thane', 23),
+  (5, 'Harry', 'Aurangabad', 36)
+
+ select * from EmployeeDetails
+
+
+
+
+-- I want to see person details where address is Goa
+select * from person where address = 'Goa' 
+
+
+-- I want to see person details where id is less than 5
+select * from person where pid < 5
+
+
+-- Distinct Operator:
+-- show me only the available bloodgroups in the person table
+select distinct bloodgroup from person 
+select distinct bloodgroup from person where BloodGroup IS NOT NULL 
+
+-- show me the different address available in person table 
+select distinct Address from person 
+
+-- show me different blood group availability in kolkata 
+select distinct bloodgroup from person where address = 'Kolkata'
+
+
+
+-- AND operator
+-- show me the O+ blood group person details present in kolkata location
+select * from person where Address = 'Kolkata'
+select * from person where BloodGroup = 'O+'
+select * from person where Address = 'Kolkata' AND BloodGroup = 'O+' AND PID < 10
+
+
+-- OR operator
+-- show me the person details if the person is from goa OR the person is O+
+select * from person where Address = 'goa'
+select * from person where BloodGroup = 'O+'
+select * from person where Address = 'Goa' OR BloodGroup = 'O+' 
+
+AND:
+True AND True --> Eligible for output 
+
+OR:
+False OR False --> Not Eligible For Output 
+True OR False --> Eligible for output 
+False OR True --> Eligible for output 
+True OR True  --> Eligible for output 
+
+select * from person where PID < 5 OR BloodGroup = 'O+' 
+-- I want to see person details where address is kolkata and blood group is O+
+select * from person where address = 'Kolkata' AND bloodgroup = 'O+'
+
+-- show me available blood geoups in kolkata
+select distinct bloodgroup from person where address = 'kolkata' 
+
+
+
+-- Working with NULL value 
+select * from person where DOB IS NULL
+select * from person where DOB IS NOT NULL
+
+
+
+-- Not operator
+select * from person where address = 'Kolkata'
+select * from person where NOT address = 'Kolkata'
+select * from person where address <> 'Kolkata'
+select * from person where address != 'Kolkata'
+
+
+select * from dbo.Person where Address = 'Kolkata'
+select * from dbo.Person where BloodGroup = 'A+'
+select * from dbo.Person where PID = 10
+select * from dbo.Person where Address = 'Kolkata' AND BloodGroup = 'O+'
+select * from dbo.Person where Address = 'Kolkata' OR BloodGroup = 'A+'
+select * from dbo.Person where BloodGroup <> 'A+'
+select * from dbo.Person where BloodGroup != 'A+'
+
+
+-- not having any value can be represented using a special character: NULL 
+select * from Person where DOB IS NULL 
+select * from Person where DOB IS NOT NULL 
+select * from Person where BloodGroup IS NULL 
+select * from Person where BloodGroup IS NOT NULL 
+select * from Person where DOB IS NULL AND BloodGroup IS NULL
+
+
+
+-- Live Assignment: 
+
+-- table structure 
+EmployeeDetails(E_ID, E_Name, E_Address, E_Age)
+
+-- please write the SQL query to create the table where E_ID will be the PK
+-- Write a sigle SQL query to insert 5 records at a single run
+-- show employee details for only aged below 40
+
+-- please write the SQL query to create the table where E_ID will be the PK
+CREATE TABLE EmployeeDetails
+(
+E_ID int not null PRIMARY KEY,
+E_Name varchar(64) not null,
+E_Address varchar(256) not null,
+E_Age tinyint null
+)
+
+-- Write a sigle SQL query to insert 5 records at a single run
+INSERT INTO EmployeeDetails VALUES
+(1,'SANTHOSH','KOLKATA',43),
+(2,'THAMAN','CHENNAI',26),
+(3,'HARSH','BANGALORE',40),
+(4,'SAMHITH','DELHI',26),
+(5,'SAMARTH','KANPUR',24)
+
+-- show employee details for only aged below 40
+select * from EmployeeDetails where E_Age < 40 
+
+
+
+
+
+
