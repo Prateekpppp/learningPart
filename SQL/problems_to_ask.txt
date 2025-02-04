@@ -12,3 +12,5 @@
 
 
 --- How to submit the assignment
+
+--- print is not working on sqlonline and mysql server
