@@ -3,8 +3,8 @@
 
 SELECT CONCAT('Quick', ' Chicken', ' Bites'); 
 
- -- way-1:
- ---------
+-- way-1:
+---------
 create function stuffChicken()
 returns varchar(250)
 
