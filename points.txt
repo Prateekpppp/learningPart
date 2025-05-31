@@ -1,0 +1,7 @@
+-- distinct
+
+-- show columns from TableName;
+
+-- limit
+
+--
