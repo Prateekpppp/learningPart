@@ -6,9 +6,10 @@
 
 -- assignment 1: 4(How), 6(any other way)
 
--- groupby
+-- groupby for multiple columns
 
-
+-- What is the minimum sales for each product ?
+select ProductId , avg(Inventory) from fact group by ProductId;
 
 
 --- How to submit the assignment
