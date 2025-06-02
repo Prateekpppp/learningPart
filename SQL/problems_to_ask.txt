@@ -13,4 +13,33 @@
 
 --- How to submit the assignment
 
---- print is not working on sqlonline and mysql server
+
+
+
+
+Problems in assignment-2:-
+--------------------------
+
+drop function dbo.stuffChicken;
+
+create function stuffChicken()
+returns varchar(250)
+
+AS
+BEGIN
+
+declare @txt varchar
+set @txt = STUFF('Quick Bites', 1, 5, 'Quick Chicken');
+return @txt
+
+END
+
+select dbo.stuffChicken()
+ giving output as --- (Q) only
+
+
+
+-- groupby for multiple columns
+
+-- What is the minimum sales for each product ?
+select ProductId , avg(Inventory) from fact group by ProductId;
