@@ -1,0 +1,5 @@
+JS
+=========================
+
+-- difference between async and sync
+-- what are threads
