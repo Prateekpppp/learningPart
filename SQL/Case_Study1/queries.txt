@@ -91,6 +91,102 @@ SELECT `Date`, p.ProductId, `ProductType`, `Product`, `Profit`, `Sales`, `State`
 16. Display the rank without any gap to show the sales wise rank.
 ---------------------------------------------------
 
+SELECT *, Dense_Rank() over (order by Sales) FROM `fact`;
+
+
+17. Find the state wise profit and sales.
+-------------------------------------------
+
+SELECT State,sum(Sales) as Total_Sales,sum(Profit) as Total_Profit FROM `fact` f join location l on f.AreaCode=l.AreaCode group by l.State order by l.State;
+
+
+18. Find the state wise profit and sales along with the product name.
+----------------------------------------------------------------------
+
+SELECT State, Product, sum(Sales) as Total_Sales, sum(Profit) as Total_Profit FROM `fact` f inner join location l on f.AreaCode=l.AreaCode inner join product p on p.ProductId=f.ProductId group by l.State, p.Product order by l.State;
+
+
+19. If there is an increase in sales of 5%, calculate the increasedsales.
+-------------------------------------------------------------------------
+
+SELECT *, (Sales+Sales*5/100) as INC_Sales FROM `fact`;
+
+
+20. Find the maximum profit along with the product ID and producttype.
+----------------------------------------------------------------------
+
+SELECT p.ProductId, p.Producttype, max(Profit) FROM `product` p inner join fact f on f.ProductId=p.ProductId group by f.ProductId, p.Producttype order by p.ProductId;
+
+
+21. Create a stored procedure to fetch the result according to the product type from Product Table.
+---------------------------------------------------------------------------------------------------
+
+create procedure FetchProduct
+@prod varchar(50)
+as
+begin
+SELECT * from product where Producttype=@prod
+end
+
+exec FetchProduct @prod='coffee'
+
+
+22. Write a query by creating a condition in which if the total expenses is less than 60 then it is a profit or else loss.
+--------------------------------------------------------------------------------------------------------------------------
+
+SELECT *, iif(`TotalExpenses`>60, 'Loss', 'Profit') FROM `fact`;
+
+
+23. Give the total weekly sales value with the date and product ID details. Use roll-up to pull the data in hierarchical order.
+-------------------------------------------------------------------------------------------------------------------------------
 
 
 
+24. Apply union and intersection operator on the tables which consist of attribute area code.
+----------------------------------------------------------------------------------------------
+
+SELECT AreaCode FROM `fact` union SELECT AreaCode from location;
+
+SELECT AreaCode FROM `fact` intersect SELECT AreaCode from location; 
+
+
+
+25. Create a user-defined function for the product table to fetch a particular product type based upon the user’s preference.
+-----------------------------------------------------------------------------------------------------------------------------
+
+create function FetchProduct(@prod varchar(50))
+returns table
+as
+begin
+SELECT * from product where Producttype=@prod
+end
+
+select FetchProduct @prod='coffee'
+
+
+26. Change the product type from coffee to tea where product ID is 1 and undo it.
+-------------------------------------------------------------------------------------------------------------
+
+begin tran
+    update product set Producttype='Tea' where Producttype='Coffee' and ProductId=1; 
+    select * from product;   ---- to check the result
+
+rollback;   ---- to undo the changes
+
+
+27. Display the date, product ID and sales where total expenses are between 100 to 200.
+---------------------------------------------------------------------------------------
+
+SELECT `Date`,`ProductId`,`Sales`,`Total Expenses` FROM `fact` where `Total Expenses` BETWEEN 100 and 200;
+
+
+28. Delete the records in the Product Table for regular type.
+-------------------------------------------------------------
+
+delete from product where Type='Regular';
+
+
+29. Display the ASCII value of the fifth character from the columnProduct.
+--------------------------------------------------------------------------
+
+SELECT product,ascii(substring(product,5,1)) FROM `product1`;

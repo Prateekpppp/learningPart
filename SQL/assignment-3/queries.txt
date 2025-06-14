@@ -1,32 +1,64 @@
 1: Create a stored procedure to display the restaurant name, type and cuisine where the table booking is not zero.
 ----------------------------------------------
 
+create procedure displayRestaurantData
+as
+begin
+    select j.RestaurantName, j.RestaurantType, j.CuisinesType from jomato as j where j.TableBooking!=0
+end
+
+exec displayRestaurantData
 
 
 
 2: Create a transaction and update the cuisine type ‘Cafe’ to ‘Cafeteria’. Check the result and rollback it.
 ----------------------------------------------
 
+begin tran
+    update jomato set CuisinesType='Cafeteria' where CuisinesType='Cafe';
+    select * from demo;   ---- to check the result
 
+rollback;   ---- to undo the changes
 
 
 3: Generate a row number column and find the top 5 areas with the highest rating of restaurants.
 ---------------------------------------------
 
-
+select top 5 Area,row_number() over(order by Rating desc) as RowNumber from jomato;
 
 
 4: Use the while loop to display the 1 to 50.
 ----------------------------------------------
 
+DECLARE @cnt int = 1
+
+while(@cnt<=50)
+BEGIN
+	PRINT 'Counter Value is : ' + convert(varchar,@cnt)
+    set @cnt = @cnt + 1
+END
 
 
 
 5: Write a query to Create a Top rating view to store the generated top 5 highest rating of restaurants.
 --------------------------------------------
 
+create view Top_Rating
+as
+select top 5 RestaurantName,Rating from jomato order by Rating desc;   
+
+
+select * from Top_Rating;
 
 
 
 6: Create a trigger that give an message whenever a new record is inserted.
 ----------------------------------------------
+
+create trigger insert_trigger
+on jomato
+for insert
+as
+begin
+print 'New Record Added'
+end

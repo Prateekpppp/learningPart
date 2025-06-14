@@ -43,3 +43,22 @@ select dbo.stuffChicken()
 
 -- What is the minimum sales for each product ?
 select ProductId , avg(Inventory) from fact group by ProductId;
+
+
+
+
+QUERY ISSUES :-
+------------
+
+SELECT AreaCode,sum(Sales) as Total_Sales,sum(Profit) as Total_Profit FROM `fact` group by AreaCode order by AreaCode;
+this gives 156 rows
+
+SELECT * FROM `location` order by AreaCode;
+this gives 157 rows
+
+
+
+
+select * from employee where FIRST_NAME like 'L%' and LAST_NAME like '%E'
+union
+select * from employee where FIRST_NAME like 'L%E';
