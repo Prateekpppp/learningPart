@@ -122,7 +122,7 @@ SELECT p.ProductId, p.Producttype, max(Profit) FROM `product` p inner join fact 
 ---------------------------------------------------------------------------------------------------
 
 create procedure FetchProduct
-@prod varchar(50)
+@prod varchar(100)
 as
 begin
 SELECT * from product where Producttype=@prod
@@ -140,6 +140,8 @@ SELECT *, iif(`TotalExpenses`>60, 'Loss', 'Profit') FROM `fact`;
 23. Give the total weekly sales value with the date and product ID details. Use roll-up to pull the data in hierarchical order.
 -------------------------------------------------------------------------------------------------------------------------------
 
+select Date, ProductId, Sum(Sales) as weekly_sales from fact 
+group by Date,ProductId with rollup; 
 
 
 24. Apply union and intersection operator on the tables which consist of attribute area code.
@@ -154,14 +156,14 @@ SELECT AreaCode FROM `fact` intersect SELECT AreaCode from location;
 25. Create a user-defined function for the product table to fetch a particular product type based upon the user’s preference.
 -----------------------------------------------------------------------------------------------------------------------------
 
-create function FetchProduct(@prod varchar(50))
-returns table
+create function FetchProduct(@prodId varchar(50))
+returns varchar(100)
 as
 begin
-SELECT * from product where Producttype=@prod
+    declare product_t varchar(100);
+    select Producttype into product_t from product where ProductId=@prodId;
+    return product_t;
 end
-
-select FetchProduct @prod='coffee'
 
 
 26. Change the product type from coffee to tea where product ID is 1 and undo it.
