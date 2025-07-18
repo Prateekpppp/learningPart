@@ -155,56 +155,67 @@ GROUP BY and HAVING Clause:
 
 
 1. List out the department wise maximum salary, minimum salary and average salary of the employees.
+----------
 
 select DEPARTMENT_ID, max(SALARY) as max_salary, min(SALARY) as min__salary, avg(SALARY) as avg__salary from employee group by DEPARTMENT_ID;
 
 
 2. List out the job wise maximum salary, minimum salary and average salary of the employees.
+----------
 
 select JOB_ID, max(SALARY) as max_salary, min(SALARY) as min__salary, avg(SALARY) as avg__salary from employee group by JOB_ID;
 
 
 3. List out the number of employees who joined each month in ascending order.
+----------
 
 select month(HIRE_DATE) as Month_No, count(1) as 'No. of Employee Hired' from employee group by month(HIRE_DATE) order by month(HIRE_DATE);
 
 
 4. List out the number of employees for each month and year in ascending order based on the year and month.
+----------
 
 select year(HIRE_DATE) as Year_No,month(HIRE_DATE) as Month_No, count(1) as 'No. of Employee Hired' from employee group by year(HIRE_DATE),month(HIRE_DATE) order by year(HIRE_DATE),month(HIRE_DATE);
 
 
 5. List out the Department ID having at least four employees.
+----------
 
 select DEPARTMENT_ID, count(1) as 'No. of Employee' from employee group by DEPARTMENT_ID having count(1)>=4;
 
 
 6. How many employees joined in February month.
+----------
 
 select month(HIRE_DATE) as Month_No, count(1) as 'No. of Employee Hired' from employee where month(HIRE_DATE)=2 group by month(HIRE_DATE);
 
 
 7. How many employees joined in May or June month.
+----------
 
 select month(HIRE_DATE) as Month_No, count(1) as 'No. of Employee Hired' from employee where month(HIRE_DATE) between 5 and 6 group by month(HIRE_DATE);
 
 
 8. How many employees joined in 1985?
+----------
 
 select year(HIRE_DATE) as Year_No, count(1) as 'No. of Employee Hired' from employee where year(HIRE_DATE)=1985 group by year(HIRE_DATE);
 
 
 9. How many employees joined each month in 1985?
+----------
 
 select month(HIRE_DATE) as Month_No, count(1) as 'No. of Employee Hired' from employee where year(HIRE_DATE)=1985 group by month(HIRE_DATE);
 
 
 10. How many employees were joined in April 1985?
+----------
 
 select count(1) as 'No. of Employee Hired' from employee where month(HIRE_DATE)=4 and year(HIRE_DATE)=1985;
 
 
 11. Which is the Department ID having greater than or equal to 3 employees joining in April 1985?
+----------
 
 select DEPARTMENT_ID, count(1) as 'No. of Employee' from employee where month(HIRE_DATE)=4 and year(HIRE_DATE)=1985 group by DEPARTMENT_ID having count(1)>=3;
 
@@ -217,16 +228,185 @@ Joins:
 
 
 1. List out employees with their department names.
+----------
 
-select EMPLOYEE_ID,DEPARTMENT_ID,d.Name from employee e left join department d on e.DEPARTMENT_ID=d.DEPARTMENT_ID; 
+select EMPLOYEE_ID,e.DEPARTMENT_ID,d.Name from employee e 
+left join department d on e.DEPARTMENT_ID=d.DEPARTMENT_ID;
 
 
 2. Display employees with their designations.
+----------
+
+select EMPLOYEE_ID,e.JOB_ID,j.Designation from employee e 
+left join job j on e.JOB_ID=j.JOB_ID;
+
+
 3. Display the employees with their department names and city.
-4. How many employees are working in different departments? Display with
-department names.
+----------
+
+select EMPLOYEE_ID,e.DEPARTMENT_ID,d.Name,l.City from employee e 
+left join department d on e.DEPARTMENT_ID=d.DEPARTMENT_ID 
+left join location l on d.Location_Id=l.Location_ID; 
+
+
+4. How many employees are working in different departments? Display with department names.
+----------
+
+SELECT d.Name, COUNT(*) AS Employee_Count FROM employee e
+JOIN department d ON e.Department_ID = d.Department_ID
+group by d.Name;
+
+
+
 5. How many employees are working in the sales department?
-6. Which is the department having greater than or equal to 3
-employees and display the department names in
-ascending order.
+----------
+
+SELECT count(*) AS Employee_Count FROM employee e
+JOIN department d ON e.Department_ID = d.Department_ID
+where d.Name = 'Sales';
+
+
+6. Which is the department having greater than or equal to 3 employees and display the department names in ascending order.
+----------
+
+select Name, count(*) AS Employee_Count FROM employee e
+JOIN department d ON e.Department_ID = d.Department_ID
+group by Name
+having Employee_Count>3
+order by Employee_Count asc;
+
+
+
 7. How many employees are working in 'Dallas'?
+----------
+
+select count(*) from employee e 
+left join department d on e.DEPARTMENT_ID=d.DEPARTMENT_ID 
+left join location l on d.Location_Id=l.Location_ID
+where l.City='Dallas';
+
+
+8. Display all employees in sales or operation departments.
+----------
+
+select EMPLOYEE_ID,e.DEPARTMENT_ID,d.Name from employee e 
+left join department d on e.DEPARTMENT_ID=d.DEPARTMENT_ID
+where d.Name='Sales' or d.Name='Operations';
+
+
+
+
+
+CONDITIONAL STATEMENT:
+---------------------
+---------------------
+
+
+1. Display the employee details with salary grades. Use conditional statement to create a grade column.
+----------
+
+select EMPLOYEE_ID, SALARY,
+case 
+when SALARY between 0 and 1000 then 'grade 1'
+when SALARY between 1000 and 2000 then 'grade 2'
+when SALARY between 2000 and 3000 then 'grade 3'
+else 'grade 4'
+end
+as grade from employee;
+
+
+
+
+2. List out the number of employees grade wise. Use conditional statement to create a grade column.
+----------
+
+select
+case 
+when SALARY between 0 and 1000 then 'grade 1'
+when SALARY between 1000 and 2000 then 'grade 2'
+when SALARY between 2000 and 3000 then 'grade 3'
+else 'grade 4'
+end
+as grade, count(*) from employee
+group by grade;
+
+
+3. Display the employee salary grades and the number of employees between 2000 to 5000 range of salary.
+----------
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Subqueries:
+----------
+----------
+
+1. Display the employees list who got the maximum salary.
+----------
+
+
+
+
+2. Display the employees who are working in the sales department.
+----------
+
+
+
+
+3. Display the employees who are working as 'Clerk'.
+----------
+
+
+
+
+4. Display the list of employees who are living in 'Boston'.
+----------
+
+
+
+
+5. Find out the number of employees working in the sales department.
+----------
+
+
+
+
+6. Update the salaries of employees who are working as clerks on the basis of10%.
+----------
+
+
+
+
+7. Display the second highest salary drawing employee details.
+----------
+
+
+
+
+8. List out the employees who earn more than every employee in department 30.
+----------
+
+
+
+
+9. Find out which department has no employees.
+----------
+
+
+
+
+10. Find out the employees who earn greater than the average salary for their department.
+----------
+
+
+
