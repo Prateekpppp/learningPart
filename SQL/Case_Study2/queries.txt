@@ -334,13 +334,19 @@ group by grade;
 3. Display the employee salary grades and the number of employees between 2000 to 5000 range of salary.
 ----------
 
-
-
-
-
-
-
-
+select grade, count(*) from (
+select 
+    case 
+	when SALARY between 0 and 1000 then 'grade 1'
+	when SALARY between 1000 and 2000 then 'grade 2'
+	when SALARY between 2000 and 5000 then 'grade 3'
+	else 'grade 4'
+    end
+    as grade
+    from employee
+    where SALARY between 2000 and 5000
+) as salary_gradeing
+group by grade;
 
 
 
@@ -354,59 +360,96 @@ Subqueries:
 1. Display the employees list who got the maximum salary.
 ----------
 
+select * from employee 
+where SALARY in (select max(SALARY) from employee);
 
 
 
 2. Display the employees who are working in the sales department.
 ----------
 
-
+select EMPLOYEE_ID from employee
+where DEPARTMENT_ID in (
+    select DEPARTMENT_ID from department
+    where Name='Sales' 
+);
 
 
 3. Display the employees who are working as 'Clerk'.
 ----------
 
-
+select EMPLOYEE_ID from employee
+where JOB_ID in (
+    select JOB_ID from job
+    where Designation='CLERK'
+);
 
 
 4. Display the list of employees who are living in 'Boston'.
 ----------
 
-
+select EMPLOYEE_ID from employee
+where Department_ID in (
+    select Department_ID from department
+    where Location_ID in (
+        select Location_ID from location where City='Boston'
+    )
+);
 
 
 5. Find out the number of employees working in the sales department.
 ----------
 
-
+select count(*) from employee
+where DEPARTMENT_ID in (
+    select DEPARTMENT_ID from department
+    where Name='Sales' 
+);
 
 
 6. Update the salaries of employees who are working as clerks on the basis of10%.
 ----------
 
-
+update employee set SALARY = SALARY+SALARY*0.1
+where JOB_ID in (
+    select JOB_ID from job
+    where Designation='CLERK'
+);
 
 
 7. Display the second highest salary drawing employee details.
 ----------
 
-
+select max(SALARY) from employee
+where SALARY not in (
+    select max(SALARY) from employee
+);
 
 
 8. List out the employees who earn more than every employee in department 30.
 ----------
 
-
-
+select EMPLOYEE_ID from employee
+where SALARY in (
+    select max(SALARY) from employee 
+    where DEPARTMENT_ID=30
+);
 
 9. Find out which department has no employees.
 ----------
 
-
+select Department_ID from department
+where Department_ID not in (select Department_ID from employee);
 
 
 10. Find out the employees who earn greater than the average salary for their department.
 ----------
 
+select EMPLOYEE_ID, SALARY,e.Department_Id, da_t.avg_salary from employee e
+left join (
+    select Department_Id, avg(SALARY) as avg_salary from employee group by Department_Id
+) as da_t
+on e.Department_ID=da_t.Department_ID
+where e.SALARY > da_t.avg_salary;
 
 

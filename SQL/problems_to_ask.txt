@@ -62,3 +62,13 @@ this gives 157 rows
 select * from employee where FIRST_NAME like 'L%' and LAST_NAME like '%E'
 union
 select * from employee where FIRST_NAME like 'L%E';
+
+
+
+sub query after from operator :-
+----------------------
+
+select EMPLOYEE_ID,max(SALARY) from (
+    select * from employee 
+    where DEPARTMENT_ID=30
+);
