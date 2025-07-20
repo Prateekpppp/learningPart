@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>IoT Dashboard</title>
+  <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+  <script src="https://cdn.socket.io/4.7.2/socket.io.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <style>
+   * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background: linear-gradient(to right, #0f2027, #203a43, #2c5364);
+      color: #fff;
+    }
+
+    header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background-color: rgba(255, 255, 255, 0.05);
+      padding: 1rem 2rem;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.4);
+      backdrop-filter: blur(5px);
+    }
+
+    .logo {
+      font-size: 1.5rem;
+      font-weight: 600;
+      color: #00f7ff;
+    }
+
+    nav {
+      display: flex;
+      gap: 2rem;
+    }
+
+    nav a {
+      color: #fff;
+      text-decoration: none;
+      font-weight: 500;
+      padding: 0.5rem 1rem;
+      border-radius: 8px;
+      transition: background 0.3s;
+    }
+
+    nav a:hover {
+      background-color: rgba(255, 255, 255, 0.1);
+    }
+
+    main {
+      padding: 2rem;
+      text-align: center;
+    }
+
+
+    h2 {
+      text-align: center;
+      margin-bottom: 1.5rem;
+    }
+
+
+    .dashboard {
+      padding: 2rem;
+    }
+
+    .widget-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 2rem;
+    }
+
+    .widget {
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: 20px;
+      padding: 1.5rem;
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+      transition: transform 0.3s ease;
+      backdrop-filter: blur(8px);
+    }
+
+    .widget:hover {
+      transform: translateY(-5px);
+    }
+
+    .widget h3 {
+      margin: 0 0 10px;
+      font-size: 1.2rem;
+      color: #00f7ff;
+    }
+
+    .widget p {
+      margin: 4px 0;
+      font-size: 0.95rem;
+    }
+
+    .sensor-value {
+      font-size: 1.8rem;
+      color: #00ff94;
+      margin-top: 10px;
+      font-weight: bold;
+    }
+
+    .sensor-time {
+      font-size: 0.8rem;
+      color: #ccc;
+      margin-top: 4px;
+    }
+
+    canvas {
+      margin-top: 1rem;
+    }
+
+    .logout-btn {
+      background: #f44336;
+      border: none;
+      padding: 10px 16px;
+      color: white;
+      border-radius: 8px;
+      cursor: pointer;
+      font-weight: bold;
+    }
+
+    .logout-btn:hover {
+      background: #c62828;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="logo">SmartIoT</div>
+    <nav>
+      <a href="dashboard.html">Dashboard</a>
+      <a href="device.html">Device Setting</a>
+      <a href="user.html">User Management</a>
+      <button onclick="logout()" class="logout-btn">Logout</button>
+    </nav>
+  </header>
+
+<main>
+
+  <div class="dashboard">
+    <h2>Connected Devices</h2>
+    <div class="widget-grid" id="widgetContainer">
+      <!-- Widgets will be injected here -->
+    </div>
+  </div>
+</main>
+  <script>
+    const socket = io();
+    const charts = {}; // Store charts per topic
+    const chartDataBuffer = {}; // Store last 10 values per topic
+
+    async function loadWidgets() {
+      try {
+        const res = await axios.get('http://localhost:3000/api/devices/findAllDevices');
+        const devices = res.data;
+        const container = document.getElementById('widgetContainer');
+        container.innerHTML = '';
+
+        devices.forEach(device => {
+          const topic = device.topic;
+          chartDataBuffer[topic] = [];
+
+          const widget = document.createElement('div');
+          widget.className = 'widget';
+          widget.id = `device-${topic}`;
+          widget.innerHTML = `
+            <h3>${device.name}</h3>
+            <p><strong>Location:</strong> ${device.location}</p>
+            <p><strong>Topic:</strong> ${device.topic}</p>
+            <div class="sensor-value" id="value-${topic}">--</div>
+            <div class="sensor-time" id="timestamp-${topic}">Waiting for data...</div>
+            <canvas id="chart-${topic}" width="300" height="100"></canvas>
+          `;
+          container.appendChild(widget);
+
+          // Initialize chart
+          const ctx = document.getElementById(`chart-${topic}`).getContext('2d');
+          charts[topic] = new Chart(ctx, {
+            type: 'line',
+            data: {
+              labels: [],
+              datasets: [{
+                label: 'Sensor Value',
+                data: [],
+                borderColor: '#00ff94',
+                backgroundColor: 'rgba(0,255,148,0.1)',
+                tension: 0.3,
+              }]
+            },
+            options: {
+              scales: {
+                x: { display: false },
+                y: {
+                  beginAtZero: true,
+                  ticks: { color: '#fff' },
+                  grid: { color: 'rgba(255,255,255,0.1)' }
+                }
+              },
+              plugins: {
+                legend: { display: false }
+              }
+            }
+          });
+        });
+      } catch (err) {
+        console.error('Error loading widgets:', err);
+      }
+    }
+
+    socket.on('live_sensor_updates', (data) => {
+      const { topic, value, timestamp } = data;
+      const valueEl = document.getElementById(`value-${topic}`);
+      const timeEl = document.getElementById(`timestamp-${topic}`);
+
+      if (valueEl && timeEl) {
+        valueEl.textContent = value;
+        timeEl.textContent = `Updated at: ${new Date(timestamp).toLocaleTimeString()}`;
+      }
+
+      // Update chart
+      if (charts[topic]) {
+        const chart = charts[topic];
+        const buffer = chartDataBuffer[topic];
+
+        // Keep only last 10 values
+        buffer.push({ value, timestamp });
+        if (buffer.length > 10) buffer.shift();
+
+        chart.data.labels = buffer.map(dp => new Date(dp.timestamp).toLocaleTimeString());
+        chart.data.datasets[0].data = buffer.map(dp => dp.value);
+        chart.update();
+      }
+    });
+
+    function logout() {
+      window.location.href = 'login.html';
+    }
+
+    loadWidgets();
+  </script>
+</body>
+</html>

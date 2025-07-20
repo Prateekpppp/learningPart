@@ -1,0 +1,15 @@
+The drain event in Node.js is emitted when the internal buffer of a writable stream is emptied and ready for more data.
+
+Why Do We Need the drain Event?
+If we use writeStream.write(data), the data is first stored in an internal buffer.
+If the buffer gets full, writeStream.write(data) returns false, meaning we should pause writing until the buffer clears.
+The drain event is triggered when the buffer is emptied, and we can resume writing.
+
+
+How the drain Event Works Here?
+If writeStream.write() buffers too much data, it may return false, meaning the buffer is full.
+The drain event is triggered when the buffer is emptied, allowing us to resume writing.
+Here, we just log a message when the buffer is drained.
+
+✅ drain prevents memory overload by ensuring controlled writing.
+✅ Using pipe() automatically manages flow control, but we log the drain event for learning.

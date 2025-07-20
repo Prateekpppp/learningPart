@@ -1,0 +1,127 @@
+CREATE DATABASE school;
+USE school;
+
+CREATE TABLE students (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    name VARCHAR(100) NOT NULL,
+    age INT CHECK (age > 0),
+    email VARCHAR(100) UNIQUE,
+    enrolled_date DATE DEFAULT NOW()
+);
+
+CREATE TABLE courses (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    name VARCHAR(100) NOT NULL,
+    credits INT CHECK (credits > 0)
+);
+
+CREATE TABLE enrollments (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    student_id INT,
+    course_id INT,
+    enrolled_on TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (student_id) REFERENCES students(id) ON DELETE CASCADE,
+    FOREIGN KEY (course_id) REFERENCES courses(id) ON DELETE CASCADE
+);
+
+
+INSERT INTO students (name, age, email) VALUES ('Abdul', 20, 'abdul@gmail.com');
+INSERT INTO students (name, age, email) VALUES ('Mahesh', 22, 'mahesh@gmail.com'); 
+INSERT INTO students (name, age, email) VALUES ('Ramya', 21, 'ramya@gmail.com'); 
+INSERT INTO students (name, age, email) VALUES ('Raj', 23, 'raj@gmail.com'); 
+
+INSERT INTO courses (name, credits) VALUES ('Mathematics', 3);
+INSERT INTO courses (name, credits) VALUES ('Computer Science', 4);
+
+INSERT INTO enrollments (student_id, course_id) VALUES (1, 1); -- Abdul enrolled in Mathematics
+INSERT INTO enrollments (student_id, course_id) VALUES (1, 2); -- Abdul enrolled in Computer Science
+INSERT INTO enrollments (student_id, course_id) VALUES (2, 1); -- Mahesh enrolled in Mathematics 
+
+
+SELECT * FROM students WHERE age > 20;
+
+SELECT name, age FROM students ORDER BY age DESC;
+
+SELECT students.name, courses.name AS course
+FROM students
+JOIN enrollments ON students.id = enrollments.student_id
+JOIN courses ON enrollments.course_id = courses.id;
+
+
+
+UPDATE students SET age = 23 WHERE name = 'Abdul';
+
+DELETE FROM students WHERE name = 'Raj';
+
+
+
+SELECT course_id, COUNT(student_id) AS total_students
+FROM enrollments
+GROUP BY course_id;
+
+
+
+SELECT name FROM students WHERE id IN 
+(SELECT student_id FROM enrollments WHERE course_id = 1);
+
+
+
+SELECT students.name, courses.name AS course
+FROM students
+INNER JOIN enrollments ON students.id = enrollments.student_id
+INNER JOIN courses ON enrollments.course_id = courses.id;
+
+
+
+SELECT students.name, courses.name AS course
+FROM students
+LEFT JOIN enrollments ON students.id = enrollments.student_id
+LEFT JOIN courses ON enrollments.course_id = courses.id;
+
+
+CREATE INDEX idx_student_email ON students(email);
+
+
+START TRANSACTION;
+UPDATE students SET age = 25 WHERE name = 'Alice';
+ROLLBACK; -- Undo changes
+
+START TRANSACTION;
+UPDATE students SET age = 25 WHERE name = 'Alice';
+COMMIT; -- Save changes
+
+
+
+CREATE VIEW student_courses AS
+SELECT students.name, courses.name AS course
+FROM students
+JOIN enrollments ON students.id = enrollments.student_id
+JOIN courses ON enrollments.course_id = courses.id;
+
+
+DELIMITER $$
+
+CREATE PROCEDURE get_student_count(OUT count_students INT)
+BEGIN
+    SELECT COUNT(*) INTO count_students FROM students;
+END $$
+
+DELIMITER ;
+
+CALL get_student_count(@total);
+SELECT @total;
+
+
+DELIMITER $$
+
+CREATE TRIGGER before_student_insert
+BEFORE INSERT ON students
+FOR EACH ROW
+BEGIN
+    IF NEW.age < 0 THEN
+        SIGNAL SQLSTATE '45000'
+        SET MESSAGE_TEXT = 'Age must be greater than 0';
+    END IF;
+END $$
+
+DELIMITER ;

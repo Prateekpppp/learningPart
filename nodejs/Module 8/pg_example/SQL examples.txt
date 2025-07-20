@@ -1,0 +1,151 @@
+download:
+https://www.enterprisedb.com/downloads/postgres-postgresql-downloads
+
+super user:
+name: postgres
+password: 123
+
+
+-- Creating a Database and Tables
+
+CREATE DATABASE school;
+
+CREATE TABLE students (
+    id SERIAL PRIMARY KEY,
+    name VARCHAR(100) NOT NULL,
+    age INT CHECK (age > 0),
+    email VARCHAR(100) UNIQUE,
+    enrolled_date DATE DEFAULT CURRENT_DATE
+);
+
+CREATE TABLE courses (
+    id SERIAL PRIMARY KEY,
+    name VARCHAR(100) NOT NULL,
+    credits INT CHECK (credits > 0)
+);
+
+CREATE TABLE enrollments (
+    id SERIAL PRIMARY KEY,
+    student_id INT REFERENCES students(id) ON DELETE CASCADE,
+    course_id INT REFERENCES courses(id) ON DELETE CASCADE,
+    enrolled_on TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+-- Inserting Data
+
+INSERT INTO students (name, age, email) VALUES ('Abdul', 20, 'abdul@gmail.com');
+INSERT INTO students (name, age, email) VALUES ('Mahesh', 22, 'mahesh@gmail.com'); 
+INSERT INTO students (name, age, email) VALUES ('Ramya', 21, 'ramya@gmail.com'); 
+INSERT INTO students (name, age, email) VALUES ('Raj', 23, 'raj@gmail.com'); 
+
+INSERT INTO courses (name, credits) VALUES ('Mathematics', 3);
+INSERT INTO courses (name, credits) VALUES ('Computer Science', 4);
+
+INSERT INTO enrollments (student_id, course_id) VALUES (1, 1); -- Abdul enrolled in Mathematics
+INSERT INTO enrollments (student_id, course_id) VALUES (1, 2); -- Abdul enrolled in Computer Science
+INSERT INTO enrollments (student_id, course_id) VALUES (2, 1); -- Mahesh enrolled in Mathematics 
+INSERT INTO enrollments (student_id, course_id) VALUES (4, 3); -- Raj enrolled in datascience
+
+-- Querying Data (SELECT, WHERE, ORDER BY)
+
+SELECT * FROM students WHERE age > 20;
+
+SELECT name, age FROM students ORDER BY age DESC;
+
+SELECT students.name, courses.name AS course
+FROM students
+JOIN enrollments ON students.id = enrollments.student_id
+JOIN courses ON enrollments.course_id = courses.id;
+
+-- Updating and Deleting Data
+
+UPDATE students SET age = 23 WHERE name = 'Abdul';
+
+DELETE FROM students WHERE name = 'Raj';
+
+-- Aggregate Functions and GROUP BY
+SELECT course_id, COUNT(student_id) AS total_students
+FROM enrollments
+GROUP BY course_id;
+
+-- sub quaries
+SELECT name FROM students WHERE id IN 
+(SELECT student_id FROM enrollments WHERE course_id = 1);
+
+-- INNER JOIN
+SELECT students.name, courses.name AS course
+FROM students
+INNER JOIN enrollments ON students.id = enrollments.student_id
+INNER JOIN courses ON enrollments.course_id = courses.id;
+
+-- LEFT JOIN (Include students even if they are not enrolled)
+SELECT students.name, courses.name AS course
+FROM students
+LEFT JOIN enrollments ON students.id = enrollments.student_id
+LEFT JOIN courses ON enrollments.course_id = courses.id;
+
+-- indexing
+CREATE INDEX idx_student_email ON students(email);
+
+-- transaction 
+
+BEGIN;
+UPDATE students SET age = 25 WHERE name = 'Alice';
+ROLLBACK; -- Undo changes
+
+BEGIN;
+UPDATE students SET age = 25 WHERE name = 'Alice';
+COMMIT; -- Save changes
+
+
+-- views
+
+CREATE VIEW student_courses AS
+SELECT students.name, courses.name AS course
+FROM students
+JOIN enrollments ON students.id = enrollments.student_id
+JOIN courses ON enrollments.course_id = courses.id;
+
+
+
+Advanced concepts:
+
+-- stored procedure
+
+CREATE FUNCTION get_student_count() RETURNS INT AS $$
+DECLARE
+    count_students INT;
+BEGIN
+    SELECT COUNT(*) INTO count_students FROM students;
+    RETURN count_students;
+END;
+$$ LANGUAGE plpgsql;
+
+SELECT get_student_count();
+
+
+--Triggers
+
+CREATE FUNCTION get_student_count() RETURNS INT AS $$
+DECLARE
+    count_students INT;
+BEGIN
+    SELECT COUNT(*) INTO count_students FROM students;
+    RETURN count_students;
+END;
+$$ LANGUAGE plpgsql;
+
+SELECT get_student_count();
+
+-- JSON and Arrays in PostgreSQL
+
+ALTER TABLE students ADD COLUMN hobbies TEXT[];
+UPDATE students SET hobbies = ARRAY['Reading', 'Gaming'] WHERE id = 1;
+
+SELECT * FROM students WHERE 'Gaming' = ANY(hobbies);
+
+
+
+
+
+
