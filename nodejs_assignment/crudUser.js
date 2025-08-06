@@ -2,9 +2,9 @@ const {mongoose,dbUrl,connectDB} = require('./dbConnection');
 const {userSchema} = require('./userSchema');
 
 var data = {
-    name:'john doe 1',
+    name:'john doe 3',
     age:28,
-    city:'kanpur',
+    city:'delhi',
     email:'johndoe@gmail.com',
     phone: 6785675679,
     post:'user1'
@@ -14,10 +14,12 @@ async function insertData(data) {
     try{
         mongoose.connect(dbUrl+'users',{useNewUrlParser: true, useUnifiedTopology: true});
         const userModel = mongoose.model('users',userSchema);
-        console.log('userModel.find()',userModel.countDocuments({}));
         
-        data.id = await userModel.find().count() + 1;
-        if(isArray(data)){
+        var userCnt = await userModel.find({id:{$exists:true}});
+        
+        data.id = userCnt.length+1;
+        
+        if(Array.isArray(data)){
             await userModel.insertMany(data);
         } else {
             await userModel.insertOne(data);
@@ -37,7 +39,7 @@ async function updateData(data) {
     try{
         mongoose.connect(dbUrl+'users',{useNewUrlParser: true, useUnifiedTopology: true});
         const userModel = mongoose.model('users',userSchema);
-        if(isArray(data)){
+        if(Array.isArray(data)){
             await userModel.updateMany(
                 {id:data.id},
                 {$set:{
@@ -68,10 +70,11 @@ async function updateData(data) {
         console.log('data not updated',err);
     } finally{
         mongoose.disconnect();
-        console.log('Connection Closed in crud during update');
+        console.log('Connection Closed in crud after update');
     }
 }
 
-insertData(data)
+// insertData(data)
+
 exports.insertData = insertData;
 exports.updateData = updateData;

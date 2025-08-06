@@ -1,6 +1,7 @@
 const mongoose = require('mongoose');
 
 const userSchema = new mongoose.Schema({
+    id : Number,
     name : {
         type:String,
         minlength:3,
@@ -23,8 +24,8 @@ const userSchema = new mongoose.Schema({
         type:Number,
         minlength:10,
         maxlength:10,
-        required:true,
         unique: true,
+        required:true
     },
     post : {
         type: String,

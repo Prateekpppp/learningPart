@@ -1,6 +1,6 @@
 const mongoose = require('mongoose');
 
-const dbUrl = 'mongodb+srv://prateekpppp4:prateek4@cluster0.lokolyb.mongodb.net/';
+const dbUrl = process.env.MONGODB;
 
 async function connectDB(dbUrl,action=null,data=null){
     try {
