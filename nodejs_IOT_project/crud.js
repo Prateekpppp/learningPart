@@ -1,4 +1,9 @@
 const {userSchema,deviceSchema} = require('schema.js');
 
 // Read Data
-function read()
+async function read(collection_name,schema_name){
+    const collectionModel = await loadcollction(collection_name,schema_name);
+    const allData = collectionModel.find({});
+
+    return allData;
+}
