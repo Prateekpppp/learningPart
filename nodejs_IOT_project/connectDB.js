@@ -1,12 +1,13 @@
+
+const {userSchema,deviceSchema} = require('./schema');
 const {mongoose} = require('mongoose');
+require('dotenv').config();
 
 
 // the function return
-function loadcollction(collection_name,schema_name){
+async function loadcollction(collection_name,schema){
     
-    mongoose.connect(dbUrl+collection_name,{useNewUrlParser: true, useUnifiedTopology: true});
-
-    return mongoose.model(collection_name,schema_name); 
+    return mongoose.model(collection_name,schema); 
 }
 
 exports.loadcollction = loadcollction;
